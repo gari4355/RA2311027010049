@@ -1,9 +1,4 @@
-Evaluation
-**Roll No:** RA2311027010049  
-**Email:** gt7412@srmist.edu.in  
-**GitHub:** gari4355
 
----
 
 ## Project Structure
 
