@@ -1,27 +1,17 @@
-import fs from "fs";
-import path from "path";
+const fs = require("fs");
+const path = require("path");
 
 const BASE_URL = "http://20.207.122.201/evaluation-service";
-const CREDS_FILE = path.join(__dirname, "../../.credentials.json");
+const CREDS_FILE = path.join(__dirname, "../.credentials.json");
 
-export interface Credentials {
-  email: string;
-  name: string;
-  rollNo: string;
-  accessCode: string;
-  clientID: string;
-  clientSecret: string;
-  access_token: string;
-}
-
-export function getCredentials(): Credentials {
+function getCredentials() {
   if (!fs.existsSync(CREDS_FILE)) {
     throw new Error("Credentials file not found. Run setup.sh first.");
   }
   return JSON.parse(fs.readFileSync(CREDS_FILE, "utf-8"));
 }
 
-export async function refreshToken(): Promise<string> {
+async function refreshToken() {
   const creds = getCredentials();
   const res = await fetch(`${BASE_URL}/auth`, {
     method: "POST",
@@ -35,16 +25,15 @@ export async function refreshToken(): Promise<string> {
       clientSecret: creds.clientSecret,
     }),
   });
-  const data = (await res.json()) as any;
+  const data = await res.json();
   const token = data.access_token;
   if (!token) throw new Error("Failed to refresh token: " + JSON.stringify(data));
-  // update credentials file
   creds.access_token = token;
   fs.writeFileSync(CREDS_FILE, JSON.stringify(creds, null, 2));
   return token;
 }
 
-export async function getToken(): Promise<string> {
+async function getToken() {
   try {
     const creds = getCredentials();
     return creds.access_token;
@@ -52,3 +41,5 @@ export async function getToken(): Promise<string> {
     return refreshToken();
   }
 }
+
+module.exports = { getCredentials, getToken, refreshToken };
