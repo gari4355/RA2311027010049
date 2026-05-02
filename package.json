@@ -1,0 +1,14 @@
+{
+  "name": "srmist-evaluation",
+  "version": "1.0.0",
+  "description": "SRMIST Evaluation Submission",
+  "scripts": {
+    "vehicle": "npx ts-node vehicle_scheduling/src/index.ts",
+    "notifications": "npx ts-node notification_system/priority_inbox.ts"
+  },
+  "dependencies": {
+    "typescript": "^5.4.5",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.12.7"
+  }
+}
